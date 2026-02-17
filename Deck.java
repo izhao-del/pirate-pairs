@@ -1,37 +1,42 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class Deck {
-    
-    private List<Card> cards;
+
+    private Card[] cards;
+    private int deckIndex;  
 
     public Deck() {
-        cards = new ArrayList<>();
+        cards = new Card[55]; 
+        deckIndex = 0;
         buildDeck();
         shuffle();
     }
 
+    // build deck
     private void buildDeck() {
-        for (int i = 1; i <= 10; i++) {
-            for(int j = 0; j < i; j++) { 
-                cards.add(new Card(i));
+        int index = 0;
+        for (int value = 1; value <= 10; value++) {
+            for (int count = 0; count < value; count++) {
+                cards[index++] = new Card(value);
             }
         }
     }
 
+    // shuffle
     public void shuffle() {
-        Collections.shuffle(cards);
+        for (int i = cards.length - 1; i > 0; i--) {
+            int j = (int)(Math.random() * (i + 1));
+            Card temp = cards[i];
+            cards[i] = cards[j];
+            cards[j] = temp;
+        }
     }
 
     public Card drawCard() {
-        if (cards.isEmpty()) {
-            return null;
-        }
-        return cards.remove(0);
-    }  
+        if (deckIndex >= cards.length) return null;  // deck empty
+        return cards[deckIndex++];
+    }
 
+    // check empty deck
     public boolean isEmpty() {
-        return cards.isEmpty();
+        return deckIndex >= cards.length;
     }
 }
